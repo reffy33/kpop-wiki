@@ -1,0 +1,33 @@
+@import '../../variables'
+  
+.artist 
+  h2
+    color: $main-color
+    font-weight: bold
+    text-align: center
+
+  p
+    margin-bottom: 7px
+
+  &__img
+    $max-size: 700px
+    max-width: $max-size
+    max-height: $max-size
+    
+    &, img
+      width: 100%
+      object-fit: cover
+
+  &__info-text 
+    font-size: 17px
+    display: flex
+    flex-direction: column
+    justify-content: center
+  
+  @at-root .text-highlight
+    font-weight: 500
+
+.members
+  &__column
+    display: flex
+    justify-content: center
