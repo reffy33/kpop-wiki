@@ -1,28 +1,21 @@
 import React from 'react'
 import "./MemberCard.sass"
 import { Card } from 'react-bootstrap'
+import IMember from '../../interfaces/IMember'
 
-export interface MemberCardProps {
-  image_url: string,
-  stage_name: string,
-  real_name: string,
-  birthday: string,
-  position: string
-}
-
-const MemberCard: React.FC<MemberCardProps> = (props) => {
+export const MemberCard: React.FC<IMember> = (member) => {
   return (
       <Card className='members__card'>
-        <Card.Img variant="top" src={props.image_url} className='members__photo' />
+        <Card.Img variant="top" src={member.image_url} className='members__photo' />
         <Card.Body>
-          <Card.Title>{props.stage_name}</Card.Title>
-          <Card.Text>Stage name: {props.stage_name}</Card.Text>
-          <Card.Text>Real name: {props.real_name}</Card.Text>
-          <Card.Text>Birthday: {props.birthday}</Card.Text>
-          <Card.Text>Position: {props.position}</Card.Text>
+          {member.ex_member && <Card.Title style={{color: "red"}}>EX MEMBER</Card.Title>}
+          <Card.Title>{member.stage_name}</Card.Title>
+          <Card.Text>Stage name: {member.stage_name}</Card.Text>
+          <Card.Text>Real name: {!!member.real_name ? member.real_name : "—"}</Card.Text>
+          <Card.Text>Birthday: {!!member.birthday ? member.birthday.toString() : "—"}</Card.Text>
+          <Card.Text>Position: {!!member.position ? member.position : "—"}</Card.Text>
+          {member.solo_debut && <Card.Text>Solo debuted at: {member.solo_debut.toString()}</Card.Text>}
         </Card.Body>
       </Card>
   )
 }
-
-export default MemberCard

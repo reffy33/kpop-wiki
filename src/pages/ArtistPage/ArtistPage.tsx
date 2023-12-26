@@ -1,52 +1,57 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./ArtistPage.sass"
-import MemberCard, { MemberCardProps } from '../../components/MemberCard/MemberCard'
+import IGroup from '../../interfaces/IGroup'
+import { MembersList } from '../../components/MembersList/MembersList'
+import { useParams } from 'react-router-dom'
 
-const MemberInfo = {
-  image_url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fvignette.wikia.nocookie.net%2Fkpop%2Fimages%2F3%2F3e%2FStray_Kids_Bang_Chan_TOP_concept_photo.png%2Frevision%2Flatest%3Fcb%3D20200502042553&f=1&nofb=1&ipt=9d10885e0872386ce5c1db33a1b847b14490bb33d1fb9d94a02343ebef74f9b2&ipo=images',
-  stage_name: "Bang Chan",
-  real_name: "Bang Christopher Chan",
-  birthday: "October 7th, 1997",
-  position: "Leader, vocalist, rapper, dancer, producer"
-} as MemberCardProps
 
-export interface ArtistProps {
-  name: string,
-  hangulName?: string,
-  debutDate: string,
-  agency?: string,
-  fandomName?: string,
-  additionalInfo?: string
-}
+export const ArtistPage: React.FC = () => {
+  const [group, setGroup] = useState<IGroup>();
+  const {id} = useParams();
+  const [isLoading, setLoading] = useState(false);
 
-const ArtistPage: React.FC<ArtistProps> = (props) => {
+  useEffect(() => {
+    setLoading(true)
+    fetch(`http://localhost:8000/groups/${id}`)
+    .then((responce) => {
+      if (responce.ok) {
+        return responce.json()
+      }
+    })
+    .then((json) => {
+      setGroup(json as IGroup)
+    })
+    .catch((error: any) => {
+      console.log(error)
+    })
+    .finally(() => {
+      setLoading(false)
+    })
+  }, [])
+
+  if (!isLoading && !group) {
+    return (<div className='d-flex justify-content-center mt-4'>Group info in empty</div>)
+  }
+
   return (
     <div className='artist mt-3'>
-      <h2>{props.name}</h2>
+      <h2>{group?.name}</h2>
       <div className='d-flex flex-column flex-lg-row justify-content-center artist__info gap-2'>
         <div className='artist__img'>
-          <img src="https://1409791524.rsc.cdn77.org/data/images/full/586214/stray-kids.jpg" alt="" />
+          <img src={group?.image_url} alt="" />
         </div>
         <div className='artist__info-text'>
-          <p><span className='text-highlight'>Hangul name:</span>{props.hangulName}</p>
-          <p><span className='text-highlight'>Debut date:</span>{props.debutDate}</p>
-          <p><span className='text-highlight'>Agency:</span>{props.agency}</p>
-          <p><span className='text-highlight'>Fandom name:</span>{props.fandomName}</p>
-          <p><span className='text-highlight'>Additional info:</span>{props.additionalInfo}</p>
+          {!!group?.hangul_name && <p><span className='text-highlight'>Hangul name: </span>{group?.hangul_name}</p>}
+          {!!group?.debut_date && <p><span className='text-highlight'>Debut date: </span>{group?.debut_date.toString()}</p>}
+          <p><span className='text-highlight'>Agency: </span>{group?.agency}</p>
+          <p><span className='text-highlight'>Fandom name: </span>{group?.fandom_name}</p>
+          {!!group?.additional_info && <p><span className='text-highlight'>Debut date: </span>{group?.additional_info}</p>}
         </div>
       </div>
-      <div className='mt-5 members'>
+      <div className='mt-5'>
         <h2>Members</h2>
-        <div className='row text-center'>
-          {[...Array(8)].map(() =>
-            <div className='col-lg-4 col-md-6 mt-4 members__column'>
-              <MemberCard {...MemberInfo}/>
-            </div>
-            )}
-        </div>
+        {!!group?.id && <MembersList id={group.id}/>}
       </div>
     </div>
   )
 }
-
-export default ArtistPage

@@ -1,18 +1,13 @@
+import IGroup from '../../interfaces/IGroup'
 import './ArtistCard.sass'
 
-interface ArtistCardProps {
-  name: string,
-  link: string,
-  image: string
-}
-
-export const ArtistCard: React.FC<ArtistCardProps> = (props) => {
+export const ArtistCard: React.FC<IGroup> = (artist) => {
   return(
-    <div className='artist-card'>
-      <a href={props.link} className='artist-card__link'>
+    <div className='artist-card d-flex justify-content-center'>
+      <a href={`/groups/${artist.id}`} className='artist-card__link'>
         <div className='artist-card__content'>
-          <img src={props.image} />
-          <span className="artist-card__text">{props.name}</span>
+          <img src={artist.image_url} />
+          <span className="artist-card__text">{artist.name}</span>
         </div>
       </a>
     </div>
