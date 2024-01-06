@@ -70,7 +70,7 @@ export const CreateGroupPage: React.FC = () => {
               name="name"
               value={values.name}
               onChange={handleChange}
-              isInvalid={!!errors.name}
+              isInvalid={!!errors.name && touched.name}
               placeholder="Enter group name" 
             />
             <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
