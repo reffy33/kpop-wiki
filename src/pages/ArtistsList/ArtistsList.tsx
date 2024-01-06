@@ -2,6 +2,7 @@ import { ArtistCard } from "../../components/ArtistCard/ArtistCard"
 import { useEffect, useState } from "react"
 import IGroup from "../../interfaces/IGroup";
 import './ArtitstsList.sass'
+import { AddCard } from "../../components/AddCard/AddCard";
 
 export enum ArtistType {
   male = "male",
@@ -50,9 +51,7 @@ export const ArtistsList: React.FC<{artistType?: ArtistType}> = (props) => {
           {groups?.map((group) => {
             return <ArtistCard key={group.id} {...group} />
           })}
-      </div>
-      <div className="d-flex justify-content-center mt-5"> 
-        <a href="/create" className="add-group-link">Add group</a>
+          <AddCard />
       </div>
     </div>
     </>
